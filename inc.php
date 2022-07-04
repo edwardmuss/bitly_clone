@@ -30,3 +30,20 @@ function GetShortUrl($url){
     return $token;
     }
    }
+
+   function GetRedirectUrl($slug){
+    global $conn;
+    $query = "SELECT * FROM url_shorten WHERE short_code = '".addslashes($slug)."' "; 
+    $result = $conn->query($query);
+    if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $hits=$row['hits']+1;
+    $sql = "update url_shorten set hits='".$hits."' where id='".$row['id']."' ";
+    $conn->query($sql);
+    return $row['url'];
+    }
+    else 
+        { 
+    die("Invalid Link!");
+    }
+   }
